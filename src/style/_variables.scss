@@ -1,0 +1,66 @@
+//-----------MIXINS----------------------
+@mixin breakpoint($point) {
+  @if $point == desktop {
+    @media (min-width: 1200px) { @content ; }
+  }
+  @else if $point == tablet {
+    @media (min-width: 768px) { @content ; }
+  }
+}
+
+@mixin background_1() {
+  background: url('./images/chat-background-crop.jpg');
+  background-size: cover;
+  opacity: 0.7;
+}
+//-----------COLORS ---------------------
+$blue_1: rgba(117, 204, 243, 0.75);
+$blue_2: rgba(45, 74, 177, 0.78);
+$blue_3: rgba(96, 156, 192, 0.6);
+$blue_4: rgba(117, 204, 243, 0.76);
+$blue_5: rgba(64, 103, 128, 0.9);
+$white_1: #f5f5f5;
+$white_2: white;
+$grey_1: rgba(165, 165, 165, 0.6);
+$grey_2: #d6d6d6;
+$grey_3: rgb(188, 188, 189);
+$grey_4: #525252;
+$green_1: rgba(68, 135, 94, 0.78);
+$green_2: #40a73f;
+$green_3: #4bd94a;
+$yellow_1: #ffd700;
+$black_1: #000000;
+$violet_1: rgba(102, 39, 172, 0.8);
+
+//----------ELEMENTS COLOR --------------
+
+//----------CHAT ELEMENT ----------------
+$chat-window-padding-bg: $blue_1;
+$chat-window-bg: $white_1;
+$chat-window-scroll-thumb: $grey_1;
+$chat-self-message-bg: $green_1;
+$chat-self-message: $white_2;
+$chat-user-message-bg: $blue_2;
+$chat-user-message: $white_2;
+$chat-info-message-bg: $violet_1;
+$chat-info-message: $white_1;
+$chat-user-name: $yellow_1;
+$chat-time-stamp: $grey_2;
+//----------SIDEBAR----------------------
+$side-bar-bg: $blue_1;
+
+//----------TABS-------------------------
+$tab-item-hover-bg: $blue_3;
+$tab-item-bg: $grey_1;
+$tab-item-active-bg: $green_2;
+$tab-item-clicked: $green_3;
+$tab-link: $white_1;
+$tab-leave-group-button: $grey_4;
+$tab-scroll-arrow-bg: $blue_5;
+
+//----------GROUPS-----------------------
+$group-item-hover-bg: $blue_3;
+$group-scroll-thumb: $grey_3;
+
+//----------IMAGES-----------------------
+//$background_1: url('../images/8.jpg');
