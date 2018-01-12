@@ -4,6 +4,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const {Users} = require('./users');
 const {generateMessage} = require('./messageTemplate');
+const sanitizeHtml = require('sanitize-html');
 
 const app = express();
 const vuePath = path.join(__dirname, '..');
@@ -62,7 +63,7 @@ io.on('connection', (socket) => {
       users.joinGroup(socket.id, group);
 
       socket.emit('messageFromServer', generateMessage({group, message: `Добро пожаловать в группу ${group}`}));
-      socket.to(group).emit('messageFromServer', generateMessage({name, group, message: `присоеденился к группе`}));
+      socket.to(group).emit('messageFromServer', generateMessage({name, group, message: `присоединил(ась)ся к группе`}));
       io.emit('groupInfoUpdate', users.getChatInfo());
       callback();
     }
@@ -85,7 +86,7 @@ io.on('connection', (socket) => {
       socket.join(group);
       users.joinGroup(socket.id, group);
 
-      io.emit('messageFromServer', generateMessage({name, message: `создал группу ${group}`}));
+      io.emit('messageFromServer', generateMessage({name, message: `создал(а) группу ${group}`}));
       io.emit('groupInfoUpdate', users.getChatInfo());
       callback();
     }
@@ -95,7 +96,7 @@ io.on('connection', (socket) => {
     const name = users.getUser(socket.id).name;
     users.leaveGroup(socket.id, group);
     socket.leave(group);
-    io.in(group).emit('messageFromServer', generateMessage({name, group, message: `покинул группу`}));
+    io.in(group).emit('messageFromServer', generateMessage({name, group, message: `покинул(а) группу`}));
     io.emit('groupInfoUpdate', users.getChatInfo());
     callback();
   });
@@ -106,8 +107,9 @@ io.on('connection', (socket) => {
     const user = users.getUser(socket.id);
     if (user) {
       const {name} = user;
-      socket.to(group).emit('messageFromServer', generateMessage({name, group, message, messageSource: 2}));
-      callback(`${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`);
+      const cleanMessage = sanitizeHtml(message);
+      socket.to(group).emit('messageFromServer', generateMessage({name, group, message: cleanMessage, messageSource: 2}));
+      callback({date:`${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`, message: cleanMessage});
     }
   });
 
@@ -116,7 +118,7 @@ io.on('connection', (socket) => {
     if (user) {
       const name = user.name;
       for (const group of user.groups) {
-        socket.to(group).emit('messageFromServer', generateMessage({name, group, message: `покинул чат`}));
+        socket.to(group).emit('messageFromServer', generateMessage({name, group, message: `покинул(а) чат`}));
       }
       users.removeUser(socket.id);
       io.emit('groupInfoUpdate', users.getChatInfo());

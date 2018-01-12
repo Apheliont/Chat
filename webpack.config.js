@@ -2,15 +2,15 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: ["webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000", "./src/main.js"],
+  entry: ["./src/main.js"], //"webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
     filename: 'build.js'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    // new webpack.HotModuleReplacementPlugin(),
+    // new webpack.NoEmitOnErrorsPlugin()
   ],
   module: {
     rules: [

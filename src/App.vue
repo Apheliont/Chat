@@ -1,12 +1,10 @@
 <template>
   <div class="wrapper">
-    <!--<div id="app" class="d-flex flex-row flex-wrap justify-content-between">-->
     <div class="chat rounded px-3 pb-3 pt-2">
       <app-tabs class="chat__tabs"></app-tabs>
       <app-chat class="chat__messageWindow"></app-chat>
     </div>
     <app-preferences class="preferences"></app-preferences>
-    <!--</div>-->
   </div>
 </template>
 

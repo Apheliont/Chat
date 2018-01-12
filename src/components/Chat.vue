@@ -7,34 +7,35 @@
                   :key="index">
         <span v-if="data.messageSource !== 0" class="chatWindow__username">{{data.name}}: </span>
         <span v-if="data.messageSource === 0" class="chatWindow__username-info">{{data.name}} </span>
-        {{data.message}}
+        <span :inner-html.prop="data.message | makeLink"></span>
         <span class="chatWindow__date">
             {{data.date}}
           </span>
       </blockquote>
     </transition-group>
     <form class="mt-3 d-flex input-form">
-        <div class="w-100 mr-3 input-form__wrapper">
-          <div ref="userName" class="userName" v-if="getUserName">{{getUserName}} :></div>
-          <textarea
-            ref="chatArea"
-            class="form-control input-form__text-area"
-            id="chatArea" rows="1"
-            v-model="inputText"
-            @keypress.enter="sendMessage"
-            >
+      <div class="w-100 mr-3 input-form__wrapper">
+        <div ref="userName" class="userName" v-if="getUserName">{{getUserName}} :></div>
+        <textarea
+          ref="chatArea"
+          class="form-control input-form__text-area"
+          id="chatArea" rows="1"
+          v-model="inputText"
+          @keypress.enter="sendMessage"
+        >
           </textarea>
-        </div>
-        <div class="align-self-center input-form__send-btn-container">
-          <button class="btn btn-success" @click.prevent="sendMessage" :disabled="!canUserSendMessage">Отправить</button>
-        </div>
+      </div>
+      <div class="align-self-center input-form__send-btn-container">
+        <button class="btn btn-success" @click.prevent="sendMessage" :disabled="!canUserSendMessage">Отправить</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
   import {appBus} from '../main';
-  import { mapGetters } from 'vuex';
+  import {mapGetters} from 'vuex';
+
   export default {
     computed: {
       ...mapGetters([
@@ -43,7 +44,6 @@
         'getMessagesForCurrentGroup',
         'getUserName'
       ]),
-
       inputText: {
         get() {
           return this.$store.getters.getInputText;
@@ -52,6 +52,15 @@
           this.$store.commit('setInputText', value);
         }
       },
+    },
+    filters: {
+      makeLink(value) {
+        return value.replace(/https?:\/\/(w{3}\.)?\S+|\bw{3}\.\S+|\b\w+?(?:\.ru|\.com|\.net|\.org|\.su|\.edu|\.gov|\.info|\.de|.uk)\b/ig, function(match) {
+          return match.search(/https?:\/\//) === -1 ?
+            `<a href="http://${match}" style="color: rgb(107,255,98)" target="_blank">${match}</a>` :
+            `<a href="${match}" style="color: rgb(107,255,98)" target="_blank">${match}</a>`
+        });
+      }
     },
     watch: {
       getCurrentGroup() {
@@ -70,10 +79,13 @@
     },
     methods: {
       calculateClass(source) {
-        switch(source) {
-          case 0: return 'chatWindow__infoMessage';
-          case 1: return 'chatWindow__selfMessage';
-          case 2: return 'chatWindow__userMessage';
+        switch (source) {
+          case 0:
+            return 'chatWindow__infoMessage';
+          case 1:
+            return 'chatWindow__selfMessage';
+          case 2:
+            return 'chatWindow__userMessage';
         }
       },
       sendMessage(e) {
@@ -82,16 +94,16 @@
           return false;
         }
 
-        const message = {
+        const myMessage = {
           name: 'Я',
           group: this.getCurrentGroup,
-          message: this.inputText,
           date: `unsent`,
           messageSource: 1
         };
-        this.saveMessage(message);
-        this.$socket.emit('messageToServer', {message: this.inputText, group: this.getCurrentGroup}, (date) => {
-          message.date = date;
+        this.$socket.emit('messageToServer', {message: this.inputText, group: this.getCurrentGroup}, ({date, message}) => {
+          myMessage.date = date;
+          myMessage.message = message;
+          this.saveMessage(myMessage);
           this.inputText = '';
         });
       },
@@ -136,8 +148,8 @@
     resize: vertical;
     min-height: 80px;
     outline: none;
-    box-shadow:none !important;
-    border:1px solid #ccc !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
 
     @include breakpoint(desktop) {
       min-height: 38px;
@@ -168,7 +180,6 @@
     top: 7px;
     width: auto;
   }
-
 
   .chatWindow__userMessage {
     align-self: flex-start;
@@ -224,6 +235,14 @@
     min-width: 60px;
   }
 
+
+  a {
+
+     }
+
+  a:hover {
+    color: rgba(255, 164, 0, 0.67);
+  }
 
   .chatWindow__username {
     color: $chat-user-name;
