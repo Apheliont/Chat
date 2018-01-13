@@ -107,7 +107,12 @@ io.on('connection', (socket) => {
     const user = users.getUser(socket.id);
     if (user) {
       const {name} = user;
-      const cleanMessage = sanitizeHtml(message);
+      const cleanMessage = sanitizeHtml(message, {
+        allowedTags: [ 'a' ],
+        allowedAttributes: {
+          'a': [ 'href', 'target', 'style' ]
+        }
+      });
       socket.to(group).emit('messageFromServer', generateMessage({name, group, message: cleanMessage, messageSource: 2}));
       callback({date:`${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`, message: cleanMessage});
     }
