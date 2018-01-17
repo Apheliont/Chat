@@ -1,6 +1,6 @@
 <template>
   <form>
-    <label for="name" class="authentication__title">Как вас зовут?</label>
+    <label for="name" class="authentication__title">Ваш логин или имя:</label>
     <div class="d-flex flex-row flex-nowrap justify-content-between">
       <div class="mr-2">
         <input type="text" id="name" class="form-control" @keydown.enter.prevent="enterName"

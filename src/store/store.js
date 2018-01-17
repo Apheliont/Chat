@@ -116,5 +116,17 @@ export const store = new Vuex.Store({
     SOCKET_GROUPINFOUPDATE(state, payload) {
       state.serverGroupsInfo = payload;
     }
+  },
+
+  actions: {
+    setUserName({commit}, payload) {
+      commit('setUserName', payload);
+    },
+    setCurrentGroup({commit}, payload) {
+      commit('setCurrentGroup', payload);
+    },
+    addGroup({commit}, payload) {
+      commit('addGroup', payload);
+    }
   }
 });

@@ -35,8 +35,8 @@
             if (err) {
               alert(err);
             } else {
-              this.$store.commit('addGroup', this.group);
-              this.$store.commit('setCurrentGroup', this.group);
+              this.$store.dispatch('addGroup', this.group);
+              this.$store.dispatch('setCurrentGroup', this.group);
               this.group = '';
               appBus.$emit('focusOnChatArea');
             }

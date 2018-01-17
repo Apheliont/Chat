@@ -1,7 +1,7 @@
 {
   "name": "IntraChat",
   "description": "Made on Vue.js and Node.js",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "author": "Apheliont <apheliont@gmail.com>",
   "license": "MIT",
   "private": true,
@@ -10,9 +10,11 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "vue": "^2.4.4",
-    "vue-socket.io": "^2.1.1-a",
-    "vuedraggable": "^2.15.0",
+    "activedirectory": "^0.7.2",
+    "socket.io-client": "^2.0.4",
+    "vue": "^2.5.13",
+    "vue-socket.io": "^2.1.1",
+    "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1"
   },
   "browserslist": [
@@ -25,16 +27,16 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-3": "^6.24.1",
-    "cross-env": "^5.0.5",
-    "css-loader": "^0.28.7",
-    "file-loader": "^1.1.4",
+    "cross-env": "^5.1.3",
+    "css-loader": "^0.28.8",
+    "file-loader": "^1.1.6",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "sass-resources-loader": "^1.3.1",
-    "vue-loader": "^13.0.5",
-    "vue-template-compiler": "^2.4.4",
+    "vue-loader": "^13.7.0",
+    "vue-template-compiler": "^2.5.13",
     "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1",
+    "webpack-dev-server": "^2.11.0",
     "webpack-hot-middleware": "^2.21.0"
   }
 }

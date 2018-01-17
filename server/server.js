@@ -31,6 +31,12 @@ const io = socketIO(server);
 // })();
 //---------------------------------
 
+const ActiveDirectory = require('activedirectory');
+const config = { url: 'ldap://localhost',
+  baseDN: 'dc=upperdomain,dc=domain,dc=com',
+  username: 'user@domain.com',
+  password: 'password' };
+const ad = new ActiveDirectory(config);
 
 app.use(express.static(vuePath));
 const users = new Users();
@@ -39,14 +45,33 @@ const users = new Users();
 io.on('connection', (socket) => {
   // Попытка ввода имени пользователя
   socket.on('enterName', (name = 'Anonimous', callback) => {
-    const result = users.addUser({id: socket.id, name});
-    if (!result) {
-      callback('Имя уже занято');
-    } else {
-      // Проапдейтить инфу на клиента о существующих чат румах
-      socket.emit('groupInfoUpdate', users.getChatInfo());
-      callback();
-    }
+    const sAMAccountName = name;
+    let result = null;
+	// Если в AD найден пользователь с указанным sAMAccountName то подставляется его Имя + Фамилия, в противном случае введеный sAMAccountName
+	// будет указан как NickName
+    ad.findUser(sAMAccountName, function(err, user) {
+      if (err) {
+        console.log(err);
+      }
+
+      if ((! user) || (user.length === 0)) {
+        result = users.addUser({id: socket.id, name: `*${name}`});
+      }
+      else {
+        name = JSON.stringify(user.displayName).replace(/\"/g, '').split(' ').slice(0,2).join(' ');
+        result = users.addUser({id: socket.id, name});
+      }
+
+      if (!result) {
+        callback('Имя уже занято');
+      } else {
+        console.log(`${name} connected`);
+        // Проапдейтить инфу на клиента о существующих чат румах
+        socket.emit('groupInfoUpdate', users.getChatInfo());
+        callback();
+      }
+    });
+
   });
 
   socket.on('join', (group, callback) => {
@@ -122,6 +147,7 @@ io.on('connection', (socket) => {
     const user = users.getUser(socket.id);
     if (user) {
       const name = user.name;
+      console.log(`${name} disconnected`);
       for (const group of user.groups) {
         socket.to(group).emit('messageFromServer', generateMessage({name, group, message: `покинул(а) чат`}));
       }

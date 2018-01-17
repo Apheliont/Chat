@@ -1,14 +1,14 @@
 <template>
-  <li class="list-group-item py-1 px-3" @dblclick="enterGroup(groupInfo.group)"
+  <li class="list-group-item py-1 px-2" @dblclick="enterGroup(groupInfo.group)"
       @selectstart.prevent>
     <p>
       <button class="list-group__expand-btn" @click="openState = !openState">{{btnSign}}</button>
       <span class="list-group__group">{{groupInfo.group}}</span>
       <span class="ml-2 badge-warning badge-pill float-right" v-if="groupInfo.userList">{{groupInfo.userList.length}}</span>
     </p>
-    <ol class="user-list" v-show="openState">
-      <li v-for="(user, index) in groupInfo.userList" :key="index">{{user}}</li>
-    </ol>
+    <ul class="user-list" v-show="openState">
+      <li class="user-list__item" v-for="(user, index) in groupInfo.userList" :key="index">{{index + 1}}. {{user}}</li>
+    </ul>
   </li>
 </template>
 
@@ -67,7 +67,14 @@
 
   }
 
+  .user-list__item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .user-list {
+    padding: 5px 8px;
     margin-top: 30px;
     background-color: #fff !important;
   }
