@@ -4,8 +4,8 @@ var webpack = require('webpack')
 module.exports = {
   entry: ["./src/main.js"], //"webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    path: path.resolve(__dirname, './public/js'),
+    publicPath: '/public/js/',
     filename: 'build.js'
   },
   plugins: [

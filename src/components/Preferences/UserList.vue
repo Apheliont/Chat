@@ -8,7 +8,7 @@
       mode="out-in"
       leave-active-class="zoomOut animated"
     >
-      <li class="list-group-item py-1 px-3" v-for="(user, index) in getUserList" :key="index">{{user}}</li>
+      <li class="list-group-item py-1 px-3" v-for="(user) in getUserList" :key="user">{{user}}</li>
     </transition-group>
   </div>
 </template>

@@ -9,7 +9,7 @@
 }
 
 @mixin background_1() {
-  background: url('./images/chat-background-crop.jpg');
+  background: url('/images/chat-background-crop.jpg');
   background-size: cover;
   opacity: 0.7;
 }

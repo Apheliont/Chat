@@ -2,6 +2,7 @@
 node_modules/
 npm-debug.log
 yarn-error.log
+server/variables.env
 
 # Editor directories and files
 .idea
@@ -9,3 +10,4 @@ yarn-error.log
 *.ntvs*
 *.njsproj
 *.sln
+*.env

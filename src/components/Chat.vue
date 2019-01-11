@@ -128,6 +128,7 @@
 
 <style scoped lang="scss">
   .chatWindow {
+    resize: vertical;
     height: 300px;
     padding: 10px;
     background-color: $chat-window-bg;

@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  intrachat:
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24
+
+services:
+  node:
+    build: .
+    container_name: intrachat
+    volumes:
+      - ./src:/usr/intrachat/src
+      - ./public:/usr/intrachat/public
+      - ./server:/usr/intrachat/server
+    ports:
+    - "80:80"
+    command: sh -c "cd /usr/intrachat/server && nodemon server.js -L"
+    networks:
+      intrachat:
+        ipv4_address: 172.22.0.2
+  redis:
+    image: redis
+    container_name: intrachat_redis
+    networks:
+      intrachat:
+        ipv4_address: 172.22.0.3
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+

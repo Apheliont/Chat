@@ -1,16 +1,16 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    chatMessages: [],   //name, group, message, date, messageSource
+    chatMessages: [], //name, group, message, date, messageSource
     joinedGroups: [],
-    currentGroup: '',
+    currentGroup: "",
     serverGroupsInfo: [],
-    userName: '',
-    inputText: '',
+    userName: "",
+    inputText: ""
   },
   getters: {
     getGroups(state) {
@@ -20,12 +20,12 @@ export const store = new Vuex.Store({
       return state.currentGroup;
     },
     canUserSendMessage(state, getters) {
-      return (getters.getGroups.length > 0 && getters.getInputText.length > 0);
+      return getters.getGroups.length > 0 && getters.getInputText.length > 0;
     },
     getMessagesForCurrentGroup(state, getters) {
       const currentGroup = getters.getCurrentGroup;
       return state.chatMessages.filter(message => {
-        return (message.group === currentGroup || message.group === '');
+        return message.group === currentGroup || message.group === "";
       });
     },
     getUserName(state) {
@@ -49,9 +49,9 @@ export const store = new Vuex.Store({
     },
     leaveGroup(state, payload) {
       // Удаляем все сообщения
-      // state.chatMessages = state.chatMessages.filter(message => {
-      //   return message.group !== payload;
-      // });
+      state.chatMessages = state.chatMessages.filter(message => {
+        return message.group !== payload;
+      });
       const index = state.joinedGroups.indexOf(payload);
       const lastIndex = state.joinedGroups.length - 1;
       state.joinedGroups.splice(index, 1);
@@ -61,7 +61,7 @@ export const store = new Vuex.Store({
         if (index === lastIndex) {
           // если это была вообще самая последняя вкладка то убрать активный таб совсем
           if (lastIndex === -1) {
-            state.currentGroup = '';
+            state.currentGroup = "";
           } else {
             state.currentGroup = state.joinedGroups[index - 1];
           }
@@ -69,7 +69,6 @@ export const store = new Vuex.Store({
           state.currentGroup = state.joinedGroups[index];
         }
       }
-
     },
     setInputText(state, payload) {
       state.inputText = payload;
@@ -88,30 +87,36 @@ export const store = new Vuex.Store({
     },
     SOCKET_CONNECT(state) {
       const message = {
-        name: '',
-        group: '',
-        message: 'Соединение установлено :)',
+        name: "",
+        group: "",
+        message: "Соединение установлено :)",
         date: `wohoo!`,
         messageSource: 0
       };
       state.chatMessages.push(message);
     },
     SOCKET_MESSAGEFROMSERVER(state, message) {
-      state.chatMessages.push(message);
+      if (Array.isArray(message)) {
+        for (let mes of message.reverse()) {
+          state.chatMessages.push(JSON.parse(mes));
+        }
+      } else {
+        state.chatMessages.push(message);
+      }
     },
     SOCKET_DISCONNECT(state) {
       const message = {
-        name: '',
-        group: '',
-        message: 'Соединение разорвано :(',
+        name: "",
+        group: "",
+        message: "Соединение разорвано :(",
         date: `fuck`,
         messageSource: 0
       };
       state.joinedGroups = [];
       state.chatMessages.push(message);
-      state.currentGroup = '';
+      state.currentGroup = "";
       state.serverGroupsInfo = [];
-      state.userName = '';
+      state.userName = "";
     },
     SOCKET_GROUPINFOUPDATE(state, payload) {
       state.serverGroupsInfo = payload;
@@ -119,14 +124,14 @@ export const store = new Vuex.Store({
   },
 
   actions: {
-    setUserName({commit}, payload) {
-      commit('setUserName', payload);
+    setUserName({ commit }, payload) {
+      commit("setUserName", payload);
     },
-    setCurrentGroup({commit}, payload) {
-      commit('setCurrentGroup', payload);
+    setCurrentGroup({ commit }, payload) {
+      commit("setCurrentGroup", payload);
     },
-    addGroup({commit}, payload) {
-      commit('addGroup', payload);
+    addGroup({ commit }, payload) {
+      commit("addGroup", payload);
     }
   }
 });
