@@ -32,6 +32,11 @@ const Database = (function() {
     getMessages(group) {
       checkDbConnect(this.redis);
       return this.redis.lrange(group, 0, -1);
+      },
+    
+    deleteGroup(group) {
+        checkDbConnect(this.redis);
+        this.redis.del(group);
     }
   };
 
