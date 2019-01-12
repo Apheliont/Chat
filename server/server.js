@@ -140,6 +140,7 @@ io.on("connection", socket => {
       generateMessage({ name, group, message: `покинул(а) группу` })
     );
     io.emit("groupInfoUpdate", users.getChatInfo());
+    console.log(users.getUsersList(group).length);
     if (users.getUsersList(group).length === 0) {
       db.deleteGroup(group);
     }
